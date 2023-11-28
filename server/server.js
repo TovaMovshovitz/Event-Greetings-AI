@@ -42,6 +42,7 @@ app.post('/generate-greeting', async (req, res) => {
         // Include general options
         if (type) prompt += ` of type ${type}`;
         if (atmosphere) prompt += ` in a ${atmosphere} atmosphere`;
+        prompt+= ' return 3 greetings in a parsable JSON format like follows: { "1": "first greeting", "2": "second greeting", "3": "third greeting" }'
 
         // Use the OpenAI API to generate greetings
         const generatedGreetings = await openAIAPI.generate(prompt, numResponses);

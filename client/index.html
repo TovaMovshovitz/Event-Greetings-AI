@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>Event Greetings AI</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Event Greetings AI</h1>
 
-    <label for="event">Select an event:</label>
-    <select id="event" onchange="updateQuestions()">
-        <option value="birthday">Birthday</option>
-        <option value="wedding">Wedding</option>
-        <option value="graduation">Graduation</option>
-        <!-- Add more event options as needed -->
-    </select>
-
-    <!-- Additional questions based on the selected event -->
-    <div id="additionalQuestions"></div>
-
+        <label for="event">Select an event:</label>
+        <select id="event" onchange="updateAdditionalQuestion()">
+          <option value="birthday">Birthday</option>
+          <option value="wedding">Wedding</option>
+          <option value="graduation">Graduation</option>
+          <!-- Add more event options as needed -->
+        </select>
+      <!-- Additional questions based on the selected event -->
+      <div id="additionalQuestions"></div>
     <!-- <button onclick="generateGreeting()">Write me a greeting</button> -->
-
-    <div id="selectedOptions"></div>
-    <div id="generatedGreeting"></div>
-    <div id="additionalQuestions"></div>
 
     <!-- General questions -->
     <label for="type">Type of blessing (song, short, long, letter):</label>
-    <input type="text" id="type">
+    <input type="text" id="type" />
 
     <label for="atmosphere">Atmosphere (happy, entertaining, funny):</label>
-    <input type="text" id="atmosphere">
+    <input type="text" id="atmosphere" />
+
+    <div id="selectedOptions"></div>
+    <div id="generatedGreeting"></div>
 
     <button onclick="generateGreeting()">Write me a greeting</button>
 
-    <button onclick="changeGreeting()">I want something different</button>
+    <button id="changeGreetingButton" onclick="changeGreeting()">I want something different</button>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
