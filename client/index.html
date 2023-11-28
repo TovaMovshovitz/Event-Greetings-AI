@@ -20,10 +20,20 @@
     <!-- Additional questions based on the selected event -->
     <div id="additionalQuestions"></div>
 
-    <button onclick="generateGreeting()">Write me a greeting</button>
+    <!-- <button onclick="generateGreeting()">Write me a greeting</button> -->
 
     <div id="selectedOptions"></div>
     <div id="generatedGreeting"></div>
+    <div id="additionalQuestions"></div>
+
+    <!-- General questions -->
+    <label for="type">Type of blessing (song, short, long, letter):</label>
+    <input type="text" id="type">
+
+    <label for="atmosphere">Atmosphere (happy, entertaining, funny):</label>
+    <input type="text" id="atmosphere">
+
+    <button onclick="generateGreeting()">Write me a greeting</button>
 
     <button onclick="changeGreeting()">I want something different</button>
 
