@@ -1,10 +1,18 @@
 const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
+dotenv.config();
+
+
+
 const bodyParser = require('body-parser');
 const { OpenAIAPI } = require('openai'); // Use the appropriate OpenAI SDK or HTTP library
 
 const app = express();
 const port = 3000;
 
+// Enable CORS for all routes
+app.use(cors());
 app.use(bodyParser.json());
 
 // Set up your OpenAI API key
@@ -19,7 +27,7 @@ app.post('/generate-greeting', async (req, res) => {
         let prompt = `Write me a`;
         if (age) prompt += ` ${age}-year-old`;
         prompt += ` ${event} greeting`;
-        
+
         // Add additional details based on the event
         switch (event) {
             case 'birthday':
@@ -42,7 +50,7 @@ app.post('/generate-greeting', async (req, res) => {
         // Include general options
         if (type) prompt += ` of type ${type}`;
         if (atmosphere) prompt += ` in a ${atmosphere} atmosphere`;
-        prompt+= ' return 3 greetings in a parsable JSON format like follows: { "1": "first greeting", "2": "second greeting", "3": "third greeting" }'
+        prompt += ' return 3 greetings in a parsable JSON format like follows: { "1": "first greeting", "2": "second greeting", "3": "third greeting" }'
 
         // Use the OpenAI API to generate greetings
         const generatedGreetings = await openAIAPI.generate(prompt, numResponses);
