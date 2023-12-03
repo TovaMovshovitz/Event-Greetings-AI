@@ -10,6 +10,7 @@ let currentGreetingIndex = 0; // Index to keep track of the currently displayed 
 [typeInput, atmosphereInput].forEach(input => {
     input.addEventListener('input', () => {
         changeGreetingButton.style.display = 'none'
+        generatedGreetingDiv.style.display = 'none';
         selectedOptionsDiv.innerHTML = '';
         generatedGreetingDiv.innerHTML = '';
     });
@@ -17,6 +18,7 @@ let currentGreetingIndex = 0; // Index to keep track of the currently displayed 
 
 async function updateAdditionalQuestion() {
     changeGreetingButton.style.display = 'none'
+    generatedGreetingDiv.style.display = 'none';
     selectedOptionsDiv.innerHTML = '';
     generatedGreetingDiv.innerHTML = '';
 
@@ -29,17 +31,18 @@ async function updateAdditionalQuestion() {
     // Add additional questions based on the selected event
     if (selectedEvent === 'birthday') {
         additionalQuestionsDiv.innerHTML += '<label for="age">Enter age:</label>';
-        additionalQuestionsDiv.innerHTML += '<input type="number" id="age" class="additionalQuestionsInput">';
+        additionalQuestionsDiv.innerHTML += '<input type="number" id="age" class="additionalQuestionsInput" placeholder="age">';
     } else if (selectedEvent === 'wedding') {
         additionalQuestionsDiv.innerHTML += '<label for="relation">Your relation to the couple:</label>';
-        additionalQuestionsDiv.innerHTML += '<input type="text" id="relation" class="additionalQuestionsInput">';
+        additionalQuestionsDiv.innerHTML += '<input type="text" id="relation" class="additionalQuestionsInput" placeholder="relation">';
     } else if (selectedEvent === 'graduation') {
         additionalQuestionsDiv.innerHTML += '<label for="degree">Enter degree:</label>';
-        additionalQuestionsDiv.innerHTML += '<input type="text" id="degree" class="additionalQuestionsInput">';
+        additionalQuestionsDiv.innerHTML += '<input type="text" id="degree" class="additionalQuestionsInput" placeholder="degree">';
     }
     const additionalQuestionsInput = document.getElementsByClassName("additionalQuestionsInput")[0]
     additionalQuestionsInput.addEventListener('input', () => {
         changeGreetingButton.style.display = 'none';
+        generatedGreetingDiv.style.display = 'none';
         selectedOptionsDiv.innerHTML = '';
         generatedGreetingDiv.innerHTML = '';
     });
@@ -54,12 +57,12 @@ async function generateGreeting() {
     const atmosphere = atmosphereInput.value;
 
     // Display selected options
-    selectedOptionsDiv.innerHTML = `<p>Event: ${selectedEvent}</p>`;
-    if (age) selectedOptionsDiv.innerHTML += `<p>Age: ${age}</p>`;
-    if (relation) selectedOptionsDiv.innerHTML += `<p>Relation: ${relation}</p>`;
-    if (degree) selectedOptionsDiv.innerHTML += `<p>Degree: ${degree}</p>`;
-    if (type) selectedOptionsDiv.innerHTML += `<p>Type: ${type}</p>`;
-    if (atmosphere) selectedOptionsDiv.innerHTML += `<p>Atmosphere: ${atmosphere}</p>`;
+    selectedOptionsDiv.innerHTML = `<p><b>Event:</b> ${selectedEvent}</p>`;
+    if (age) selectedOptionsDiv.innerHTML += `<p><b>Age:</b> ${age}</p>`;
+    if (relation) selectedOptionsDiv.innerHTML += `<p><b>Relation:</b> ${relation}</p>`;
+    if (degree) selectedOptionsDiv.innerHTML += `<p><b>Degree:</b> ${degree}</p>`;
+    if (type) selectedOptionsDiv.innerHTML += `<p><b>Type:</b> ${type}</p>`;
+    if (atmosphere) selectedOptionsDiv.innerHTML += `<p><b>Atmosphere:</b> ${atmosphere}</p>`;
 
     try {
         // Call the server to generate a greeting
@@ -94,7 +97,8 @@ async function generateGreeting() {
 function displayCurrentGreeting() {
     // Check if there are greetings to display
     if (greetingsData.length > 0) {
-        generatedGreetingDiv.innerHTML = `<p>${greetingsData[currentGreetingIndex]}</p>`;
+        generatedGreetingDiv.innerText = `${greetingsData[currentGreetingIndex]}`;
+        generatedGreetingDiv.style.display = 'inline-block'
     } else {
         generatedGreetingDiv.innerHTML = '<p>No greetings available.</p>';
     }

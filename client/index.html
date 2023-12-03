@@ -8,31 +8,36 @@
   </head>
   <body>
     <h1>Event Greetings AI</h1>
-
+    <div class="container">
+      <div id="inputs">
         <label for="event">Select an event:</label>
         <select id="event" onchange="updateAdditionalQuestion()">
+          <option value="" disabled selected>Select an event:</option>
           <option value="birthday">Birthday</option>
           <option value="wedding">Wedding</option>
           <option value="graduation">Graduation</option>
-          <!-- Add more event options as needed -->
         </select>
-      <!-- Additional questions based on the selected event -->
-      <div id="additionalQuestions"></div>
-    <!-- <button onclick="generateGreeting()">Write me a greeting</button> -->
 
-    <!-- General questions -->
-    <label for="type">Type of blessing (song, short, long, letter):</label>
-    <input type="text" id="type" />
+        <!-- Additional questions based on the selected event -->
+        <span id="additionalQuestions"></span>
 
-    <label for="atmosphere">Atmosphere (happy, entertaining, funny):</label>
-    <input type="text" id="atmosphere" />
+        <!-- General questions -->
+        <label for="type">Type of blessing (song, short, long, letter):</label>
+        <input type="text" id="type" placeholder="type" />
 
-    <div id="selectedOptions"></div>
+        <label for="atmosphere">Atmosphere (happy, entertaining, funny):</label>
+        <input type="text" id="atmosphere" placeholder="atmosphere" />
+      </div>
+      <div id="selectedOptions"></div>
+    </div>
     <div id="generatedGreeting"></div>
+    <br/>
 
     <button onclick="generateGreeting()">Write me a greeting</button>
 
-    <button id="changeGreetingButton" onclick="changeGreeting()">I want something different</button>
+    <button id="changeGreetingButton" onclick="changeGreeting()">
+      I want something different
+    </button>
 
     <script src="script.js"></script>
   </body>
