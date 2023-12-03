@@ -1,4 +1,7 @@
 const express = require('express');
+const dotenv= require('dotenv'); 
+dotenv.config(); 
+
 const bodyParser = require('body-parser');
 const { OpenAIAPI } = require('openai'); // Use the appropriate OpenAI SDK or HTTP library
 
