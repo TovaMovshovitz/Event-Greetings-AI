@@ -99,11 +99,11 @@ async function generateGreeting() {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
+    debugger;
     const data = await response.json();
     greetingsData.length = 0; // Clear the existing greetings
     currentGreetingIndex = 0;
-    greetingsData.push(...Object.values(data.greetings));
+    greetingsData.push(...Object.values(data));
 
     // Display the first greeting
     displayCurrentGreeting();
