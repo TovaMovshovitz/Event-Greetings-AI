@@ -3,6 +3,9 @@ const atmosphereInput = document.getElementById("atmosphere");
 const changeGreetingButton = document.getElementById("changeGreetingButton");
 const selectedOptionsDiv = document.getElementById("selectedOptions");
 const generatedGreetingDiv = document.getElementById("generatedGreeting");
+const generateGreetingButton = document.getElementById(
+  "generateGreetingButton"
+);
 
 const greetingsData = []; // Array to store the retrieved greetings
 let currentGreetingIndex = 0; // Index to keep track of the currently displayed greeting
@@ -11,12 +14,14 @@ let currentGreetingIndex = 0; // Index to keep track of the currently displayed 
   input.addEventListener("input", () => {
     changeGreetingButton.style.display = "none";
     generatedGreetingDiv.style.display = "none";
+    generateGreetingButton.style.display = "inline-block";
     selectedOptionsDiv.innerHTML = "";
     generatedGreetingDiv.innerHTML = "";
   });
 });
 
 async function updateAdditionalQuestion() {
+  generateGreetingButton.style.display = "inline-block";
   changeGreetingButton.style.display = "none";
   generatedGreetingDiv.style.display = "none";
   selectedOptionsDiv.innerHTML = "";
@@ -49,6 +54,7 @@ async function updateAdditionalQuestion() {
   )[0];
   additionalQuestionsInput.addEventListener("input", () => {
     changeGreetingButton.style.display = "none";
+    generateGreetingButton.style.display = "inline-block";
     generatedGreetingDiv.style.display = "none";
     selectedOptionsDiv.innerHTML = "";
     generatedGreetingDiv.innerHTML = "";
@@ -99,7 +105,6 @@ async function generateGreeting() {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    debugger;
     const data = await response.json();
     greetingsData.length = 0; // Clear the existing greetings
     currentGreetingIndex = 0;
@@ -109,25 +114,23 @@ async function generateGreeting() {
     displayCurrentGreeting();
 
     changeGreetingButton.style.display = "inline-block";
+    generateGreetingButton.style.display = "none";
   } catch (error) {
     console.error("Error:", error);
-    // Handle error gracefully, e.g., display an error message to the user
+    greetingsData.length = 0;
+    currentGreetingIndex = 0;
     displayCurrentGreeting();
   }
 }
 
 function displayCurrentGreeting() {
-  console.log("in display");
   // Check if there are greetings to display
   if (greetingsData.length > 0) {
     generatedGreetingDiv.innerText = `${greetingsData[currentGreetingIndex]}`;
-    generatedGreetingDiv.style.display = "inline-block";
   } else {
-    console.log("in else");
-
     generatedGreetingDiv.innerHTML = "<p>something went wrong 😕</p>";
-    generatedGreetingDiv.style.display = "inline-block";
   }
+  generatedGreetingDiv.style.display = "inline-block";
 }
 
 function changeGreeting() {
