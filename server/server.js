@@ -1,70 +1,61 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
+const express = require("express");
+const { OpenAI } = require("openai");
+const dotenv = require("dotenv");
+const cors = require("cors");
 dotenv.config();
 
-
-
-const bodyParser = require('body-parser');
-const { OpenAIAPI } = require('openai'); // Use the appropriate OpenAI SDK or HTTP library
+const bodyParser = require("body-parser");
 
 const app = express();
 const port = 3000;
+const openai = new OpenAI({ apiKey: process.env.APIKEY });
 
-// Enable CORS for all routes
 app.use(cors());
 app.use(bodyParser.json());
 
-// Set up your OpenAI API key
-const openAIAPI = new OpenAIAPI('your-openai-api-key');
+const generatePrompt = (params) => {
+  const { event, age, relation, degree, type, atmosphere } = params;
+  let prompt = `Write me a`;
+  if (age) prompt += ` ${age}-year-old`;
+  prompt += ` ${event} greeting`;
 
-// Handle POST requests for generating greetings
-app.post('/generate-greeting', async (req, res) => {
-    try {
-        const { event, age, relation, degree, type, atmosphere, numResponses = 1 } = req.body;
+  switch (event) {
+    case "birthday":
+      break;
+    case "wedding":
+      if (relation) prompt += ` for the ${relation}`;
+      break;
+    case "graduation":
+      if (degree) prompt += ` for the graduate with a ${degree} degree`;
+      break;
+    default:
+      break;
+  }
 
-        // Build a prompt for OpenAI GPT based on the selected event and options
-        let prompt = `Write me a`;
-        if (age) prompt += ` ${age}-year-old`;
-        prompt += ` ${event} greeting`;
+  if (type) prompt += ` of type ${type}`;
+  if (atmosphere) prompt += ` in a ${atmosphere} atmosphere`;
+  prompt += ` return 3 greetings in a parsable JSON format like follows:
+  { "1": "first greeting", "2": "second greeting", "3": "third greeting" }`;
+  return prompt;
+};
 
-        // Add additional details based on the event
-        switch (event) {
-            case 'birthday':
-                // Include age-specific details
-                break;
-            case 'wedding':
-                // Include relation-specific details
-                if (relation) prompt += ` for the ${relation}`;
-                break;
-            case 'graduation':
-                // Include degree-specific details
-                if (degree) prompt += ` for the graduate with a ${degree} degree`;
-                break;
-            // Add more cases for other events
-            default:
-                // Handle unknown events
-                break;
-        }
+app.post("/generate-greeting", async (req, res) => {
+  try {
+    const prompt = generatePrompt(req.body);
 
-        // Include general options
-        if (type) prompt += ` of type ${type}`;
-        if (atmosphere) prompt += ` in a ${atmosphere} atmosphere`;
-        prompt += ' return 3 greetings in a parsable JSON format like follows: { "1": "first greeting", "2": "second greeting", "3": "third greeting" }'
-
-        // Use the OpenAI API to generate greetings
-        const generatedGreetings = await openAIAPI.generate(prompt, numResponses);
-
-        // Send the generated greetings back to the client
-        res.json({ greetings: generatedGreetings });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+    const generatedGreetings = await openai.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "gpt-3.5-turbo",
+      temperature: 0.8,
+    });
+    const response = generatedGreetings.choices[0].message.content;
+    res.send(response);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-// Handle other routes as needed
-
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
