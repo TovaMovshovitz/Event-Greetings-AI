@@ -41,7 +41,15 @@ const generatePrompt = (params) => {
 
 app.post("/generate-greeting", async (req, res) => {
   try {
-    const prompt = generatePrompt(req.body);
+    const { event, age, relation, degree, type, atmosphere } = req.body;
+    if (!event || !type || !atmosphere || (event == "birthday" && !age)) {
+      console.log(event, type, atmosphere);
+      return res.status(400).json({ error: "Missing required parameters. Please provide event, type, atmosphere, and age for birthday events" });
+    }
+    if ((age && isNaN(age)) || age <= 0) {
+      return res.status(400).json({ error: "Invalid age. Age must be a positive numeric value" });
+    }
+    const prompt = generatePrompt({ event, age, relation, degree, type, atmosphere })
 
     const generatedGreetings = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
@@ -49,6 +57,7 @@ app.post("/generate-greeting", async (req, res) => {
       temperature: 0.8,
     });
     const response = generatedGreetings.choices[0].message.content;
+
     res.send(response);
   } catch (error) {
     console.error("Error:", error);
@@ -60,4 +69,4 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-module.exports={app,generatePrompt}
+module.exports = { app, generatePrompt };

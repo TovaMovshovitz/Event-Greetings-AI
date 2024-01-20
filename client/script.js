@@ -52,13 +52,15 @@ async function updateAdditionalQuestion() {
   const additionalQuestionsInput = document.getElementsByClassName(
     "additionalQuestionsInput"
   )[0];
-  additionalQuestionsInput.addEventListener("input", () => {
-    changeGreetingButton.style.display = "none";
-    generateGreetingButton.style.display = "inline-block";
-    generatedGreetingDiv.style.display = "none";
-    selectedOptionsDiv.innerHTML = "";
-    generatedGreetingDiv.innerHTML = "";
-  });
+  if (additionalQuestionsInput) {
+    additionalQuestionsInput.addEventListener("input", () => {
+      changeGreetingButton.style.display = "none";
+      generateGreetingButton.style.display = "inline-block";
+      generatedGreetingDiv.style.display = "none";
+      selectedOptionsDiv.innerHTML = "";
+      generatedGreetingDiv.innerHTML = "";
+    });
+  }
 }
 
 async function generateGreeting() {
@@ -103,6 +105,9 @@ async function generateGreeting() {
     });
 
     if (!response.ok) {
+      responseData = await response.json();
+      generatedGreetingDiv.innerHTML = `<p>Something went wrong 😕<br/>${responseData.error}</p>`;
+      generatedGreetingDiv.style.display = "inline-block";
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
@@ -119,7 +124,6 @@ async function generateGreeting() {
     console.error("Error:", error);
     greetingsData.length = 0;
     currentGreetingIndex = 0;
-    displayCurrentGreeting();
   }
 }
 
