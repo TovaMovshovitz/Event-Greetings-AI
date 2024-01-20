@@ -19,11 +19,9 @@
         </select>
         <!-- Additional questions based on the selected event -->
         <span id="additionalQuestions"></span>
-
         <!-- General questions -->
         <label for="type">Type of blessing (song, short, long, letter):</label>
         <input type="text" id="type" placeholder="type" />
-
         <label for="atmosphere">Atmosphere (happy, entertaining, funny):</label>
         <input type="text" id="atmosphere" placeholder="atmosphere" />
       </div>
@@ -31,13 +29,10 @@
     </div>
     <div id="generatedGreeting"></div>
     <br/>
-
-    <button onclick="generateGreeting()">Write me a greeting</button>
-
+    <button id="generateGreetingButton" onclick="generateGreeting()">Write me a greeting</button>
+    <!-- <button onclick="generateGreeting()">Write me a greeting</button> -->
     <button id="changeGreetingButton" onclick="changeGreeting()">
       I want something different
     </button>
-
     <script src="script.js"></script>
   </body>
-</html>
