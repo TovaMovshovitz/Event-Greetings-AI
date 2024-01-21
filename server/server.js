@@ -1,5 +1,5 @@
 const express = require("express");
-const { OpenAI } = require("openai");
+const OpenAI = require("openai");
 const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
@@ -43,10 +43,9 @@ app.post("/generate-greeting", async (req, res) => {
   try {
     const { event, age, relation, degree, type, atmosphere } = req.body;
     if (!event || !type || !atmosphere || (event == "birthday" && !age)) {
-      console.log(event, type, atmosphere);
       return res.status(400).json({ error: "Missing required parameters. Please provide event, type, atmosphere, and age for birthday events" });
     }
-    if ((age && isNaN(age)) || age <= 0) {
+    if (age && (isNaN(age) || age <= 0)) {
       return res.status(400).json({ error: "Invalid age. Age must be a positive numeric value" });
     }
     const prompt = generatePrompt({ event, age, relation, degree, type, atmosphere })
@@ -57,7 +56,7 @@ app.post("/generate-greeting", async (req, res) => {
       temperature: 0.8,
     });
     const response = generatedGreetings.choices[0].message.content;
-
+    
     res.send(response);
   } catch (error) {
     console.error("Error:", error);

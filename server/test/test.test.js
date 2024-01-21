@@ -1,14 +1,36 @@
 const request = require("supertest");
 const { app, generatePrompt } = require("../server");
-const dotenv = require("dotenv");
-dotenv.config();
+require("dotenv").config();
+
+const openAIResponseMock = {
+  "1": "first greeting",
+  "2": "second greeting",
+  "3": "third greeting"
+};
+
+jest.mock('openai', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      chat: {
+        completions: {
+          create: jest.fn().mockImplementation(async () => {
+            return { choices: [{ message: { content: openAIResponseMock } }] };
+          })
+        }
+      }
+    };
+  });
+});
+
 
 describe("POST /generate-greeting", () => {
   test("should return generate greetings", async () => {
     const params = { event: "birthday", age: 10, type: "song", atmosphere: "happy" };
-    return request(app).post("/generate-greeting").send(params).expect(200);
+    const response = await request(app).post("/generate-greeting").send(params);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(openAIResponseMock);
   });
-  
+
   test("should return missing parameter error", async () => {
     const response = await request(app).post("/generate-greeting").send({});
     expect(response.status).toBe(400);
@@ -16,7 +38,7 @@ describe("POST /generate-greeting", () => {
       error: "Missing required parameters. Please provide event, type, atmosphere, and age for birthday events"
     });
   });
-  
+
   test("should return invalid age error", async () => {
     const params = { event: "birthday", age: -5, type: "song", atmosphere: "happy" };
     const response = await request(app).post("/generate-greeting").send(params);
